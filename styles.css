@@ -1,0 +1,209 @@
+/* Global Reset */
+* {
+    box-sizing: border-box;
+    border: 0;
+    margin: 0;
+}
+
+/* Body Styles */
+body {
+    background-color: #001651; /* Set background color to cover the entire screen */
+    width: 100%;
+    height: 100%;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    body {
+        height: 250vh;
+    }
+}
+
+@media (max-width: 992px) {
+    body {
+        width: 200%;
+        height: 200vh;
+    }
+}
+
+/* .bg Styles */
+.bg {
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+@media(max-width:768px) {
+    .bg {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+}
+
+/* .logo Styles */
+.logo {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 50px;
+    padding-right: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@media(max-width:992px) {
+    .logo {
+        justify-content: flex-start;
+        padding-top: 30px;
+        padding-right: 0px;
+    }
+
+    .logo-t {
+        width: 100px;
+        height: 37px;
+    }
+}
+
+/* .text-01 and .Lass-text Styles */
+.text-01 {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    color: white;
+}
+
+.Lass-text {
+    margin-right: 5px;
+    font-size: 75px;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+/* .description Styles */
+.description {
+    font-family: Helvetica;
+    font-weight: lighter;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis;
+    font-size: 30px;
+    font-style: italic;
+    padding-top: 27px;
+    padding-right: 5px;
+}
+
+@media(max-width:768px) {
+    /* Responsive styles for smaller screens */
+    .text-01 {
+        padding-top: 10px;
+    }
+
+    .Lass-text {
+        font-size: 25px;
+    }
+
+    .description {
+        font-size: 16px;
+        padding-top: 5px;
+    }
+}
+
+/* .container-x Styles */
+.container-x {
+    display: flex;
+    height: 297px;
+}
+
+@media(max-width:768px) {
+    .container-x {
+        flex-direction: column;
+        height: 297px;
+    }
+}
+
+/* .form-profile and .form Styles */
+.form-profile {
+    background-color: #e1e1e1;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.form {
+    flex: 1;
+}
+
+@media(max-width:768px) {
+    .form-profile {
+        width: 450px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+}
+
+/* .profile Styles */
+.profile {
+    padding-top: 10px;
+    padding-left: 150px;
+    padding-right: 200px;
+}
+
+/* .form-text and Image Styles */
+.form-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-text .image-1,
+.image-2,
+.image-3,
+.image-4 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+@media(max-width:768px) {
+    .form-text .image-1 {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    } 
+}
+
+/* Input Box Styles */
+.form-inputbox {
+    padding-top: 15px;
+}
+
+/* Icon Styles */
+.icon-1 {
+    padding-left: 30px;
+    padding-right: 10px;
+}
+
+.icon-2 {
+    padding-left: 25px;
+    padding-right: 4px;
+}
+
+@media(max-width:768px) {
+    .icon-1 {
+        padding-left: 50px;
+        padding-right: 10px;
+    }
+    
+    .icon-2 {
+        padding-left: 45px;
+        padding-right: 4px;
+    } 
+}
+
+/* Form Input Styles */
+.form input {
+    border: 1px solid rgb(100, 97, 97);
+    font-size: 20px;
+    color: rgb(100, 99, 99);
+    padding: 4px;
+    width: 300px;
+}
+
+/* Placeholder Styles */
+.form ::placeholder {
+    color: rgb(100, 99, 99);
+}
