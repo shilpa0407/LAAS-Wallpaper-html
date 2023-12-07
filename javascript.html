@@ -1,0 +1,398 @@
+<%@ Page Language="C#" AutoEventWireup="true"  ValidateRequest="false" CodeBehind="Home.aspx.cs" Inherits="LAASLogin.Home" Theme="Default" EnableEventValidation="false" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="styles/style.css" rel="stylesheet" type="text/css" />
+    <%-- 
+        <script
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
+            type="text/javascript">
+        </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    --%>
+    <%--<script
+            src="Scripts/jquery-1.8.3.min.js"
+            type="text/javascript">
+        </script>--%>
+    <script
+        src="Scripts/jquery-3.6.0.min.js"
+        type="text/javascript">
+    </script>
+    <script
+        src="Scripts/jquery-confirm-3.3.2.min.js"
+        type="text/javascript">
+    </script>
+
+    <link rel="stylesheet" href="Styles/jquery-confirm-3.3.2.min.css">
+    <%--<link rel="stylesheet" href="Styles/jquery-confirm-3.1.1.min.css">--%>
+  
+    <meta http-equiv="refresh" content="600;home.aspx" />
+    <title>WSS-Mphasis</title>
+    <script language="javascript" type="text/javascript">
+     //    var CovidNotificationOn = '<= System.Configuration.ConfigurationManager.AppSettings["CovidNotificationOn"].ToString() >';
+      //  var CovidNotificationOn = '@System.Configuration.ConfigurationManager.AppSettings["CovidNotificationOn"]';
+        //var CovidNotificationOn = "Enabled";
+        //function CheckForSLA(hours, minutes) {
+        //    var hrs = document.getElementById(hours).value;
+        //    var mins = document.getElementById(minutes).value;
+        //     if (hrs < 4) {
+        //         var Msg = 'You have logged in for ' + hrs + ' hours and ' + mins + ' Minutes. Continue? ';
+        //         var a = confirm(Msg);
+        //         if (a) {
+        //             return true;
+        //         }
+        //         else {
+        //            return false;
+        //        }
+        //    }
+        //    else {
+        //        return true;
+        //    }
+        //}
+        var accessCardAgain = { accessCardID: "", submit: false };
+        function customConfirm(Msg) {
+            accessCardData.processing = true;
+            $.confirm({
+                autoClose: 'no|10000',
+                title: 'Early Checkout ?',
+                content: Msg + "<br/><br/> Swipe your access card again / press enter key to continue.",
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    tryAgain: {
+                        text: 'Continue',
+                        btnClass: 'btn-red btn-proceed',
+                        keys: ['enter', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+                        action: function () {
+                            accessCardAgain.submit = true;
+                            $("#btnCheckOut").click();
+                        }
+                    },
+                    no: {
+                        btnClass: 'confirm-no',
+                        keys: ['n'],
+                        action: function () {
+                            accessCardData.processing = false;
+                            $('#btnClear').click();
+                        }
+                    }
+                }
+            });
+            //$(document).keyup(function (e) { // Access Card Scanned Again
+            //    if (!isNaN(e.key)) {
+            //        $('.btn-proceed').click();
+            //    }
+            //});
+            //});
+        }
+
+        function CheckForSLA(hours, minutes) {
+            //  return true;
+            if (accessCardAgain.submit) { // Access Card Scanned Again
+                return true;
+            }
+            var hrs = document.getElementById(hours).value;
+            var mins = document.getElementById(minutes).value;
+            //var hrs = 1;
+            //var mins = 10;
+            var Msg = 'You have logged in for ' + hrs + ' hours and ' + mins + ' Minutes.';
+
+            if (hrs < 4) {
+                customConfirm(Msg);
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        function ClearMe(txtCode, dispname, headermsg, errormsg, lastchecked, btnchkin, btnchkout, btnprechkout) {
+
+            //alert(txtCode);
+            document.getElementById(txtCode).value = "";
+            document.getElementById(dispname).innerHTML = "";
+            document.getElementById(headermsg).innerHTML = "";
+            document.getElementById(errormsg).innerHTML = "";
+            document.getElementById(lastchecked).innerHTML = "";
+
+            document.getElementById(btnchkin).style.display = "none";
+            document.getElementById(btnchkout).style.display = "none";
+            document.getElementById(btnprechkout).style.display = "none";
+
+            document.getElementById(txtCode).focus();
+            return false;
+
+        }
+        function EnterEvent(e) {
+            if (e.keyCode == 13) {
+                $('#btnGo').trigger('click');
+            }
+        }
+        function ShowIt() {
+            document.getElementById("btnCheckIn").focus();
+            if (document.getElementById('hdnBirthday').value == "1") {
+                var myDiv = document.getElementById("divMsg");
+                myDiv.className = "background";
+                setTimeout("hideIt()", 5000); // after 3 sec
+            }
+        }
+        function hideIt() {
+            var myDiv = document.getElementById("divMsg");
+            myDiv.className = "nobackground";
+        }
+        function doClick(buttonName, e) {
+            //the purpose of this function is to allow the enter key to 
+            //point to the correct button to click.
+            var key;
+
+            if (window.event)
+                key = window.event.keyCode;     //IE
+            else
+                key = e.which;     //firefox
+
+            if (key == 13) {
+                //Get the button the user wants to have clicked
+                var btn = document.getElementById(buttonName);
+                if (btn != null) { //If we find the button click it
+                    btn.click();
+                    event.keyCode = 0
+                }
+            }
+            else {
+                if ((key < 48 || key > 57) && (key != 46)) {
+                    alert('Please enter valid employee code.');
+                    return false;
+                }
+            }
+        }
+        function DisplayMessage(msg) {
+            setTimeout(function () {msg}, 300);
+        }
+    </script>
+
+     <script src="AccessCard.js" type="text/javascript"></script>
+    <style>
+        .jconfirm-box {
+            color: black;
+        }
+
+        .jconfirm-content {
+            font-size: medium;
+        }
+    </style>
+</head>
+<body style="background-color: #000033">
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1"
+            runat="server">
+        </asp:ScriptManager>
+        <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick">
+        </asp:Timer>
+        <div id="wrapper">
+            <div class="container">
+                <div class="header">
+                    <div class="main-head">
+                        <div class="hd1">
+                            Attendance System
+                        </div>
+                        <div class="hd2">
+                        </div>
+                        <div class="logo">
+                            <img src="images/logo.png" />
+                        </div>
+                    </div>
+                    <!---main head end---->
+                    <p class="error-message">
+                        <asp:Label ID="lblMessage" runat="server" SkinID="ErrorMsg"></asp:Label>
+                        <asp:Label ID="lblHeaderMessage" runat="server" SkinID="ErrorMsgBlue"></asp:Label>
+                        <iframe src="refresh.aspx" style="display: none"></iframe>
+                    </p>
+                    <div class="form-outer">
+                        <div class="form-side">
+                            <div class=" form-inner">
+                                <table width="370" cellpadding="0" cellspacing="0" border="0">
+
+                                    <tr>
+                                        <td width="33" align="center">
+                                            <img src="images/user.png" /></td>
+                                        <td width="287" style="font-size: 18px; font-family: Arial; color: #000000; font-weight: bold;">Employee ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td height="20px">
+                                            <asp:Label ID="lblEmployeeCode" runat="server" Visible="false"></asp:Label>
+                                            <%--<asp:TextBox ID="txtEmployeeCode" runat="server" SkinID="txtBoxGeneral1" MaxLength="7" onkeypress="return EnterEvent(event)" ClientIDMode="Static"></asp:TextBox>--%>
+                                            <%--<asp:Button ID="btnGo" runat="server" OnClick="btnGo_Click" Style="display: none" SkinID="btnGeneral" />--%>
+                                            <asp:TextBox ID="txtEmployeeCode" runat="server" SkinID="txtBoxGeneral1" MaxLength="7" ClientIDMode="Static"></asp:TextBox>
+                                            <asp:Button ID="btnGo" runat="server" OnClick="btnGo_Click" SkinID="btnInvisible" Text="Search" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10px" colspan="2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="33" align="center">
+                                            <img src="images/user.png" /></td>
+                                        <td width="287" style="font-size: 18px; font-family: Arial; color: #000000; font-weight: bold;">Employee Name</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td height="20px"><b>
+                                            <asp:Label ID="lblEmpDisplayName" runat="server" SkinID="label"></asp:Label></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10px" colspan="2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="33" align="center">
+                                            <img src="images/date.png" /></td>
+                                        <td width="287" style="font-size: 18px; font-family: Arial; color: #000000; font-weight: bold;">Day</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td height="20px"><b>
+                                            <asp:Label ID="lblDisplayDay" runat="server" SkinID="label"></asp:Label></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10px" colspan="2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="33" align="center">
+                                            <img src="images/user.png" /></td>
+                                        <td width="287" style="font-size: 18px; font-family: Arial; color: #000000; font-weight: bold;">Last Checked</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td height="20px"><b>
+                                            <asp:Label ID="lbldisplayLastchecked" runat="server" SkinID="label"></asp:Label></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10px" colspan="2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="33" align="center">
+                                            <img src="images/date.png" /></td>
+                                        <td width="287" style="font-size: 18px; font-family: Arial; color: #000000; font-weight: bold;">Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td height="20px">
+                                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                                <ContentTemplate>
+                                                    <b>
+                                                        <asp:Label ID="lblDisplayDate" runat="server" SkinID="label"></asp:Label></b>
+                                                    <br />
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:AsyncPostBackTrigger ControlID="tIMER1" EventName="Tick"></asp:AsyncPostBackTrigger>
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="100px" colspan="2" align="center">
+                                            <asp:Button ID="btnCheckIn" runat="server" Text="Check In"
+                                                OnClick="btnCheckIn_Click" SkinID="btnGeneral" ClientIDMode="Static" />
+                                            <asp:Button ID="btnCheckOut" runat="server" Text="Check Out"
+                                                OnClick="btnCheckOut_Click" SkinID="btnGeneral" />
+                                            <asp:Button ID="btnPrevCheckOut" runat="server" Text="Prev Check Out"
+                                                OnClick="btnPrevCheckOut_Click" SkinID="btnGeneral" />
+                                            <asp:Button ID="btnClear" runat="server" SkinID="btnGeneral" Text="Clear" />
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        <!---form side end---->
+
+                        <div class="center-outer">
+                            <div class="content-1">
+                                <strong>Login to Self Service Portal (SSP) to know <span style="color: #003333;">Salary Payout 
+			Status</span> for current month. Use this navigation below. </strong>
+                                <div class="content-link">
+                                    <strong>Appgate -> SSP -> Employee links -> Salary Payment Status</strong>
+                                </div>
+                            </div>
+
+                            <div class="content-2">
+                                <strong>Did you know that Answers to all your
+                                    <br />
+                                    queries about HR is now on your<br />
+                                    <span style="color: #003333;">HR Space, PeopleSoft </span>
+                                </strong>
+                            </div>
+
+                            <div class="contentt-1">
+                                <strong>Please access instant information about HR and its related 
+				departments on PS through </strong>
+                                <div class="content-link1">
+                                    <strong>PS -> Self Service -> HR Helpdesk -> Frequently
+                                        <br />
+                                        Asked Questions -> HR Helpdesk </strong>
+                                </div>
+                            </div>
+
+                            <div class="content-3">
+                                <strong>Self Help is the Best Help.<br />
+                                    <span style="color: #fff;">Lets develop the SELF HELP culture. </span>
+                                </strong>
+                            </div>
+
+                        </div>
+                        <!----center outer-------->
+
+                        <div class="right-icons">
+                            <div class="icons">
+                                <img src="images/icon-1.png" />
+                            </div>
+                            <div class="icons">
+                                <img src="images/icon-2.png" />
+                            </div>
+                            <div class="icons">
+                                <img src="images/icon-3.png" />
+                            </div>
+                            <div class="icons1">
+                                <img src="images/icon-4.png" />
+                            </div>
+                        </div>
+                        <!---right icons end----->
+
+                        <div class="banner">
+                            <asp:HiddenField ID="hdnBirthday" runat="server" />
+                            <table width="100%">
+                                <tr>
+                                    <td align="right">
+                                        <img src="images/Laas_Screen_Left-Side.jpg" height="225" /></td>
+                                    <td>&nbsp;</td>
+                                    <td align="left">
+                                        <img src="images/Laas_Screen_Right-Side.jpg" height="225" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!------banner end---->
+
+                    </div>
+                    <!----form outer end---->
+                </div>
+                <!----header end--->
+            </div>
+            <!----container end------>
+        </div>
+        <!----wrapper end---->
+        <div>
+            <asp:HiddenField ID="hdnHours" runat="server" Value="0" />
+            <asp:HiddenField ID="hdnMinutes" runat="server" Value="0" />
+        </div>
+    </form>
+</body>
+</html>
